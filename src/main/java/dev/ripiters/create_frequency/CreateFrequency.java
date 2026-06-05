@@ -6,12 +6,12 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import dev.ripiters.create_frequency.common.*;
+import dev.ripiters.create_frequency.common.CFCreativeTabEvents;
 import dev.ripiters.create_frequency.common.network.CFPackets;
 import dev.ripiters.create_frequency.common.network.FrequencyNetworkHandler;
 import dev.ripiters.create_frequency.config.FrequencyConfig;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -28,7 +28,6 @@ public class CreateFrequency {
     public static final FrequencyNetworkHandler FREQUENCY_NETWORK_HANDLER = new FrequencyNetworkHandler();
 
     private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID)
-            .defaultCreativeTab((net.minecraft.resources.ResourceKey<CreativeModeTab>) null)
             .setTooltipModifierFactory(item ->
                     new ItemDescription.Modifier(item, FontHelper.Palette.STANDARD_CREATE)
                             .andThen(TooltipModifier.mapNull(KineticStats.create(item)))
@@ -40,7 +39,7 @@ public class CreateFrequency {
 
         REGISTRATE.registerEventListeners(modEventBus);
 
-        CFCreativeTabs.register(modEventBus);
+        modEventBus.addListener(CFCreativeTabEvents::addCreativeContents);
         CFBlocks.register();
         CFItems.register();
         CFBlockEntityTypes.register();

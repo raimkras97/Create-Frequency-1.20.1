@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "create_frequency:frequency_receiver"
+          "name": "create_frequency:frequency_transmitter"
         }
       ],
       "rolls": 1.0

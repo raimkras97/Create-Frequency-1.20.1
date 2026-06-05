@@ -3,6 +3,7 @@ package dev.ripiters.create_frequency.common.link;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.WrenchableDirectionalBlock;
 import dev.ripiters.create_frequency.client.gui.FrequencyConfigScreen;
+import dev.ripiters.create_frequency.common.CFBlocks;
 import dev.ripiters.create_frequency.common.CFBlockEntityTypes;
 import dev.ripiters.create_frequency.common.CFShapes;
 import net.createmod.catnip.data.Iterate;
@@ -16,6 +17,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -148,6 +150,11 @@ public class FrequencySignalTransmitter extends WrenchableDirectionalBlock imple
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (player.isShiftKeyDown()) return InteractionResult.PASS;
+        // Wrench in main hand is handled by onWrenched(); do not open GUI.
+        if (hand == InteractionHand.MAIN_HAND
+                && player.getMainHandItem().getItem() instanceof com.simibubi.create.content.equipment.wrench.WrenchItem) {
+            return InteractionResult.PASS;
+        }
 
         if (!level.isClientSide) {
             withBlockEntityDo(level, pos, FrequencyBlockEntity::refreshNetworkData);
@@ -157,6 +164,11 @@ public class FrequencySignalTransmitter extends WrenchableDirectionalBlock imple
             distributeGui(pos);
         }
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public InteractionResult onWrenched(BlockState state, UseOnContext context) {
+        return FrequencyLinkVariantHelper.toggle(context.getLevel(), context.getClickedPos(), state, CFBlocks.FREQUENCY_RECEIVER.get());
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -1,5 +1,6 @@
 package dev.ripiters.create_frequency;
 
+import dev.ripiters.create_frequency.client.FrequencyLinkClientHandler;
 import dev.ripiters.create_frequency.common.link.controller.FrequencyControllerClientHandler;
 import dev.ripiters.create_frequency.config.FrequencyConfig;
 import net.createmod.catnip.config.ui.BaseConfigScreen;
@@ -13,7 +14,7 @@ import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
@@ -49,14 +50,16 @@ public class CreateFrequencyClient {
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
         FrequencyControllerClientHandler.tick();
+        FrequencyLinkClientHandler.tick();
     }
 
     @Mod.EventBusSubscriber(modid = CreateFrequency.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ModEvents {
 
+        @SuppressWarnings("removal")
         @SubscribeEvent
         public static void onLoadComplete(FMLLoadCompleteEvent event) {
-            ModLoadingContext.get().registerExtensionPoint(
+            FMLJavaModLoadingContext.get().registerExtensionPoint(
                     ConfigScreenHandler.ConfigScreenFactory.class,
                     () -> new ConfigScreenHandler.ConfigScreenFactory((minecraft, parent) ->
                             new BaseConfigScreen(parent, CreateFrequency.MODID)

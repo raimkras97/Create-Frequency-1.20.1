@@ -10,10 +10,6 @@ public class CFItems {
 
     private static final CreateRegistrate REGISTRATE = CreateFrequency.getRegistrate();
 
-    static {
-        REGISTRATE.setCreativeTab(CFCreativeTabs.MAIN);
-    }
-
     public static final ItemEntry<FrequencyControllerItem> FREQUENCY_CONTROLLER =
             REGISTRATE.item("frequency_controller", FrequencyControllerItem::new)
                     .properties(p -> p.stacksTo(1))

@@ -24,6 +24,14 @@ public class CFPackets {
             ConfigureFrequencyPacket::encode,
             ConfigureFrequencyPacket::decode,
             ConfigureFrequencyPacket::handle);
+        CHANNEL.registerMessage(id++, FrequencyListRequestPacket.class,
+            FrequencyListRequestPacket::encode,
+            FrequencyListRequestPacket::decode,
+            FrequencyListRequestPacket::handle);
+        CHANNEL.registerMessage(id++, FrequencyListResponsePacket.class,
+            FrequencyListResponsePacket::encode,
+            FrequencyListResponsePacket::decode,
+            FrequencyListResponsePacket::handle);
         CHANNEL.registerMessage(id++, FrequencyControllerBindPacket.class,
             FrequencyControllerBindPacket::encode,
             FrequencyControllerBindPacket::decode,

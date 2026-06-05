@@ -21,10 +21,6 @@ import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 public class CFBlocks {
     private static final CreateRegistrate REGISTRATE = CreateFrequency.getRegistrate();
 
-    static {
-        REGISTRATE.setCreativeTab(CFCreativeTabs.MAIN);
-    }
-
     public static final BlockEntry<FrequencySignalTransmitter> FREQUENCY_TRANSMITTER =
             REGISTRATE.block("frequency_transmitter", FrequencySignalTransmitter::new)
                     .initialProperties(SharedProperties::wooden)
@@ -47,8 +43,6 @@ public class CFBlocks {
                     .tag(AllTags.AllBlockTags.BRITTLE.tag, AllTags.AllBlockTags.SAFE_NBT.tag)
                     .blockstate(new FrequencyLinkGenerator()::generate)
                     .addLayer(() -> RenderType::cutoutMipped)
-                    .item()
-                    .transform(customItemModel("_", "receiver"))
                     .register();
 
     public static final BlockEntry<LecternFrequencyControllerBlock> LECTERN_FREQUENCY_CONTROLLER =

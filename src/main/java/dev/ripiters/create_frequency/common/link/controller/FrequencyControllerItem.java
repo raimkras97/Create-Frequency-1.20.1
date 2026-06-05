@@ -151,6 +151,7 @@ public class FrequencyControllerItem extends Item implements MenuProvider {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
         List<Float> binds = CFDataComponents.getBinds(stack);
         if (FrequencyConfig.CLIENT.enableControllerAdvancedTooltip.get()) {

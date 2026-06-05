@@ -95,4 +95,33 @@ public class FrequencyNetworkHandler {
         }
         return "";
     }
+
+    public static List<FrequencyListEntry> getActiveFrequencies(Level level) {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return List.of();
+        }
+
+        Map<Float, Set<IFrequencyLinkable>> networksInWorld = connections.get(level);
+        if (networksInWorld == null || networksInWorld.isEmpty()) {
+            return List.of();
+        }
+
+        FrequencyNetworkData data = FrequencyNetworkData.get(serverLevel);
+        List<FrequencyListEntry> entries = new ArrayList<>();
+
+        for (Map.Entry<Float, Set<IFrequencyLinkable>> entry : networksInWorld.entrySet()) {
+            boolean hasActiveMember = entry.getValue().stream().anyMatch(IFrequencyLinkable::isAlive);
+            if (!hasActiveMember) {
+                continue;
+            }
+
+            float frequency = entry.getKey();
+            entries.add(new FrequencyListEntry(frequency, data.names.getOrDefault(frequency, "")));
+        }
+
+        entries.sort(Comparator.comparingDouble(FrequencyListEntry::frequency));
+        return entries;
+    }
+
+    public record FrequencyListEntry(float frequency, String name) {}
 }

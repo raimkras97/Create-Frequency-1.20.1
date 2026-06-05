@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public enum CFGuiTextures implements ScreenElement {
 
     PLAYER_INVENTORY("player_inventory", 176, 108),
-    TRANSMITTER_RECEIVER("transmitter_receiver", 173, 205),
+    TRANSMITTER_RECEIVER("transmitter_receiver", 256, 256),
     FREQUENCY_CONTROLLER("frequency_controller", 234, 86),
     ;
 
