@@ -16,6 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +39,6 @@ public class FrequencyConfigScreen extends AbstractSimiScreen {
     private static final int PREVIEW_X = 40;
     private static final int PREVIEW_Y = 71;
     private static final int PREVIEW_WIDTH = 137;
-    private static final int PREVIEW_HEIGHT = 16;
     private static final int CONFIRM_X = 167;
     private static final int CONFIRM_Y = 102;
     private static final int POPUP_WIDTH = 170;
@@ -47,11 +47,9 @@ public class FrequencyConfigScreen extends AbstractSimiScreen {
 
     private final CFGuiTextures background = CFGuiTextures.TRANSMITTER_RECEIVER;
     private final BlockPos pos;
-    private final FrequencyBlockEntity be;
 
     private EditBox hzInput;
     private EditBox nameInput;
-    private IconButton confirmButton;
 
     private float frequency;
     private String networkName;
@@ -72,7 +70,6 @@ public class FrequencyConfigScreen extends AbstractSimiScreen {
     public FrequencyConfigScreen(BlockPos pos, FrequencyBlockEntity be) {
         super(CFLang.translateDirect(KEY_TITLE));
         this.pos = pos;
-        this.be = be;
         this.frequency = be.getFrequency();
         this.networkName = be.getNetworkName();
     }
@@ -103,7 +100,7 @@ public class FrequencyConfigScreen extends AbstractSimiScreen {
         nameInput.setResponder(this::onNameEdited);
         addRenderableWidget(nameInput);
 
-        confirmButton = new IconButton(x + CONFIRM_X, y + CONFIRM_Y, AllIcons.I_CONFIRM);
+        IconButton confirmButton = new IconButton(x + CONFIRM_X, y + CONFIRM_Y, AllIcons.I_CONFIRM);
         confirmButton.withCallback(this::onClose);
         addRenderableWidget(confirmButton);
 
@@ -131,7 +128,7 @@ public class FrequencyConfigScreen extends AbstractSimiScreen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         super.render(graphics, mouseX, mouseY, partialTicks);
         if (selectorOpen) {
             renderSelectorPopup(graphics, guiLeft, guiTop);
@@ -336,7 +333,7 @@ public class FrequencyConfigScreen extends AbstractSimiScreen {
     private EditBox createAlignedInput(int x, int y, int width, int height) {
         return new EditBox(font, x, y, width, height, Component.empty()) {
             @Override
-            public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+            public void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
                 graphics.pose().pushPose();
                 graphics.pose().translate(0, 1, 0);
                 super.renderWidget(graphics, mouseX, mouseY, partialTicks);
@@ -406,7 +403,9 @@ public class FrequencyConfigScreen extends AbstractSimiScreen {
             try {
                 float parsed = Float.parseFloat(value.replace(",", "."));
                 if (parsed > 1000) {
-                    setHzValue("1000");
+                    suppressCallbacks = true;
+                    hzInput.setValue("1000");
+                    suppressCallbacks = false;
                     return;
                 }
             } catch (NumberFormatException ignored) {
@@ -530,19 +529,6 @@ public class FrequencyConfigScreen extends AbstractSimiScreen {
         return "";
     }
 
-    private String getPreviewFrequency() {
-        String value = hzInput.getValue().trim();
-        if (value.isEmpty() || value.equals(".")) {
-            return "";
-        }
-
-        try {
-            return formatFreq(Float.parseFloat(value.replace(",", ".")));
-        } catch (NumberFormatException ignored) {
-            return value;
-        }
-    }
-
     private String getEntryDisplayText(FrequencyNetworkHandler.FrequencyListEntry entry, int maxWidth) {
         String name = entry.name().isBlank() ? CFLang.translateDirect(KEY_UNNAMED).getString() : entry.name();
         return font.plainSubstrByWidth(name + " (" + formatFreq(entry.frequency()) + "Hz)", maxWidth);
@@ -554,12 +540,6 @@ public class FrequencyConfigScreen extends AbstractSimiScreen {
             return frequencyText;
         }
         return entry.name() + " (" + frequencyText + ")";
-    }
-
-    private void setHzValue(String value) {
-        suppressCallbacks = true;
-        hzInput.setValue(value);
-        suppressCallbacks = false;
     }
 
     private String formatFreq(float f) {

@@ -5,7 +5,6 @@ import dev.ripiters.create_frequency.common.link.controller.FrequencyControllerC
 import dev.ripiters.create_frequency.config.FrequencyConfig;
 import net.createmod.catnip.config.ui.BaseConfigScreen;
 import net.minecraft.client.player.Input;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.InputEvent;

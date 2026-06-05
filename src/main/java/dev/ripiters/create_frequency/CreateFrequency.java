@@ -6,12 +6,10 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import dev.ripiters.create_frequency.common.*;
-import dev.ripiters.create_frequency.common.CFCreativeTabEvents;
 import dev.ripiters.create_frequency.common.network.CFPackets;
 import dev.ripiters.create_frequency.common.network.FrequencyNetworkHandler;
 import dev.ripiters.create_frequency.config.FrequencyConfig;
 import net.createmod.catnip.lang.FontHelper;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -22,7 +20,6 @@ import org.slf4j.Logger;
 @Mod(CreateFrequency.MODID)
 public class CreateFrequency {
     public static final String MODID = "create_frequency";
-    public static final String NAME = "Create Frequency";
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public static final FrequencyNetworkHandler FREQUENCY_NETWORK_HANDLER = new FrequencyNetworkHandler();
@@ -33,6 +30,7 @@ public class CreateFrequency {
                             .andThen(TooltipModifier.mapNull(KineticStats.create(item)))
             );
 
+    @SuppressWarnings("removal")
     public CreateFrequency() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
@@ -59,9 +57,5 @@ public class CreateFrequency {
 
     public static CreateRegistrate getRegistrate() {
         return REGISTRATE;
-    }
-
-    public static ResourceLocation resourceLocation(String path) {
-        return new ResourceLocation(MODID, path);
     }
 }

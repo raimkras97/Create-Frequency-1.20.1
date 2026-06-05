@@ -1,7 +1,6 @@
 package dev.ripiters.create_frequency.common.link.controller;
 
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
-import dev.ripiters.create_frequency.CreateFrequency;
 import dev.ripiters.create_frequency.client.gui.FrequencyControllerMenu;
 import dev.ripiters.create_frequency.common.CFBlocks;
 import dev.ripiters.create_frequency.common.CFDataComponents;
@@ -33,8 +32,8 @@ import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
 import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 
-@SuppressWarnings("removal")
 public class FrequencyControllerItem extends Item implements MenuProvider {
 
     public FrequencyControllerItem(Properties properties) {
@@ -84,14 +83,13 @@ public class FrequencyControllerItem extends Item implements MenuProvider {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    @Nonnull
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level world, @Nonnull Player player, @Nonnull InteractionHand hand) {
         ItemStack heldItem = player.getItemInHand(hand);
 
         if (player.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND) {
             if (!world.isClientSide && player instanceof ServerPlayer sp && sp.mayBuild())
-                NetworkHooks.openScreen(sp, this, buf -> {
-                    buf.writeItem(heldItem);
-                });
+                NetworkHooks.openScreen(sp, this, buf -> buf.writeItem(heldItem));
             return InteractionResultHolder.success(heldItem);
         }
 
@@ -116,7 +114,7 @@ public class FrequencyControllerItem extends Item implements MenuProvider {
     }
 
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+    public AbstractContainerMenu createMenu(int id, @Nonnull Inventory inv, @Nonnull Player player) {
         ItemStack heldItem = player.getMainHandItem();
         if (!(heldItem.getItem() instanceof FrequencyControllerItem)) {
             heldItem = player.getOffhandItem();
@@ -125,6 +123,7 @@ public class FrequencyControllerItem extends Item implements MenuProvider {
     }
 
     @Override
+    @Nonnull
     public Component getDisplayName() {
         return getDescription();
     }
@@ -141,7 +140,8 @@ public class FrequencyControllerItem extends Item implements MenuProvider {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
+    @Nonnull
+    public UseAnim getUseAnimation(@Nonnull ItemStack stack) {
         return UseAnim.NONE;
     }
 
@@ -152,7 +152,7 @@ public class FrequencyControllerItem extends Item implements MenuProvider {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(@Nonnull ItemStack stack, Level level, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flag) {
         List<Float> binds = CFDataComponents.getBinds(stack);
         if (FrequencyConfig.CLIENT.enableControllerAdvancedTooltip.get()) {
             for (int i = 0; i < binds.size(); i++) {

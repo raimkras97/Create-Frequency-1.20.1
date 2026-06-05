@@ -34,6 +34,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
+
+@SuppressWarnings("deprecation")
 public class FrequencySignalTransmitter extends WrenchableDirectionalBlock implements IBE<FrequencyTransmitterBlockEntity> {
 
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -50,7 +53,7 @@ public class FrequencySignalTransmitter extends WrenchableDirectionalBlock imple
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos,
+    public void neighborChanged(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Block block, @Nonnull BlockPos fromPos,
         boolean isMoving) {
         if (level.isClientSide)
             return;
@@ -69,7 +72,7 @@ public class FrequencySignalTransmitter extends WrenchableDirectionalBlock imple
     }
 
     @Override
-    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource r) {
+    public void tick(@Nonnull BlockState state, @Nonnull ServerLevel level, @Nonnull BlockPos pos, @Nonnull RandomSource r) {
         updateTransmittedSignal(state, level, pos);
 
         Direction attachedFace = state.getValue(FrequencySignalTransmitter.FACING)
@@ -82,14 +85,14 @@ public class FrequencySignalTransmitter extends WrenchableDirectionalBlock imple
     }
 
     @Override
-    public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+    public void onPlace(@Nonnull BlockState state, @Nonnull Level worldIn, @Nonnull BlockPos pos, @Nonnull BlockState oldState, boolean isMoving) {
         if (state.getBlock() == oldState.getBlock() || isMoving)
             return;
         updateTransmittedSignal(state, worldIn, pos);
     }
 
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+    public void onRemove(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull BlockState pNewState, boolean pMovedByPiston) {
         IBE.onRemove(pState, pLevel, pPos, pNewState);
     }
 
@@ -141,14 +144,15 @@ public class FrequencySignalTransmitter extends WrenchableDirectionalBlock imple
     }
 
     @Override
-    public int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
+    public int getDirectSignal(@Nonnull BlockState blockState, @Nonnull BlockGetter blockAccess, @Nonnull BlockPos pos, @Nonnull Direction side) {
         if (side != blockState.getValue(FACING))
             return 0;
         return getSignal(blockState, blockAccess, pos, side);
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    @Nonnull
+    public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hit) {
         if (player.isShiftKeyDown()) return InteractionResult.PASS;
         // Wrench in main hand is handled by onWrenched(); do not open GUI.
         if (hand == InteractionHand.MAIN_HAND
@@ -190,7 +194,7 @@ public class FrequencySignalTransmitter extends WrenchableDirectionalBlock imple
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
+    public boolean canSurvive(@Nonnull BlockState state, @Nonnull LevelReader worldIn, @Nonnull BlockPos pos) {
         BlockPos neighbourPos = pos.relative(state.getValue(FACING)
                 .getOpposite());
         BlockState neighbour = worldIn.getBlockState(neighbourPos);
@@ -205,12 +209,13 @@ public class FrequencySignalTransmitter extends WrenchableDirectionalBlock imple
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    @Nonnull
+    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter world, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
         return CFShapes.FREQUENCY_BRIDGE.get(state.getValue(FACING));
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter getter, BlockPos pos, PathComputationType pathComputationType) {
+    public boolean isPathfindable(@Nonnull BlockState state, @Nonnull BlockGetter getter, @Nonnull BlockPos pos, @Nonnull PathComputationType pathComputationType) {
         return false;
     }
 

@@ -10,6 +10,8 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 public class CFPackets {
     private static final String PROTOCOL_VERSION = "1";
+
+    @SuppressWarnings("removal")
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
         new ResourceLocation(CreateFrequency.MODID, "main"),
         () -> PROTOCOL_VERSION,
