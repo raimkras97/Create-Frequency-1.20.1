@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "dev.ripiters.create_frequency.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "create_frequency.refmap.json",
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
