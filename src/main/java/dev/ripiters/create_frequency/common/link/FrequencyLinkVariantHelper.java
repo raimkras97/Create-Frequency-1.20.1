@@ -14,7 +14,7 @@ public final class FrequencyLinkVariantHelper {
 
     public static InteractionResult toggle(Level level, BlockPos pos, BlockState state, Block targetBlock) {
         if (level.isClientSide) {
-            return InteractionResult.SUCCESS;
+            return InteractionResult.PASS;
         }
 
         String networkName = "";
