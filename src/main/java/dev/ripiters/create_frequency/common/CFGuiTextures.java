@@ -1,6 +1,5 @@
 package dev.ripiters.create_frequency.common;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import dev.ripiters.create_frequency.CreateFrequency;
 import net.createmod.catnip.gui.element.ScreenElement;
 import net.minecraft.client.gui.GuiGraphics;
@@ -36,11 +35,6 @@ public enum CFGuiTextures implements ScreenElement {
         this.height = height;
         this.startX = startX;
         this.startY = startY;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void bind() {
-        RenderSystem.setShaderTexture(0, location);
     }
 
     @OnlyIn(Dist.CLIENT)

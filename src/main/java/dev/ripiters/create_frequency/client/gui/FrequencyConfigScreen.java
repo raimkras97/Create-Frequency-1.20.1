@@ -138,7 +138,8 @@ public class FrequencyConfigScreen extends AbstractSimiScreen {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         if (selectorOpen && isSelectorInteraction(mouseX, mouseY)) {
-            return selectByScroll(delta);
+            selectByScroll(delta);
+            return true;
         }
         return super.mouseScrolled(mouseX, mouseY, delta);
     }
@@ -173,7 +174,7 @@ public class FrequencyConfigScreen extends AbstractSimiScreen {
         }
 
         if (selectorOpen && isInPopupBounds(mouseX, mouseY)) {
-            handlePopupClick(mouseX, mouseY);
+            handlePopupClick(mouseY);
             return true;
         }
 
@@ -311,9 +312,9 @@ public class FrequencyConfigScreen extends AbstractSimiScreen {
         graphics.drawString(font, listHint, popupX + 5, popupY + popupHeight - font.lineHeight - 4, 0x8F8F8F, false);
     }
 
-    private boolean selectByScroll(double delta) {
+    private void selectByScroll(double delta) {
         if (availableFrequencies.isEmpty()) {
-            return true;
+            return;
         }
 
         int currentIndex = getSelectedIndex();
@@ -327,7 +328,6 @@ public class FrequencyConfigScreen extends AbstractSimiScreen {
         nextIndex = Math.max(0, Math.min(availableFrequencies.size() - 1, nextIndex));
         applySelectedEntry(availableFrequencies.get(nextIndex), true);
         alignListToSelection();
-        return true;
     }
 
     private EditBox createAlignedInput(int x, int y, int width, int height) {
@@ -355,7 +355,7 @@ public class FrequencyConfigScreen extends AbstractSimiScreen {
         }
     }
 
-    private void handlePopupClick(double mouseX, double mouseY) {
+    private void handlePopupClick(double mouseY) {
         if (availableFrequencies.isEmpty()) {
             return;
         }
